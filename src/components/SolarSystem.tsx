@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { GRAHAS } from '../data/grahas';
 import type { GrahaId } from '../data/types';
 import { grahaName } from '../lib/names';
@@ -52,7 +52,7 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
     return () => ro.disconnect();
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const place = (t: number) => {
       const set = (key: string, x: number, y: number, z?: number) => {
         const el = refs.current.get(key);
@@ -100,6 +100,10 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
     };
 
     if (reduced) { place(FROZEN_T); return; }
+
+    // Place once synchronously: without this every body paints stacked at the
+    // stage origin for the frame before the first rAF lands.
+    place(0);
 
     let raf = 0;
     let clock = 0;
@@ -209,9 +213,6 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
             className="orb-body orb-sphere"
             style={{ width: 38, height: 38, boxShadow: '0 0 15px rgba(90, 150, 220, 0.5)' }}
           />
-          {/* Above the body on purpose: Chandra's label sits below, so the two
-              can never collide however the Moon happens to be placed. */}
-          <span className="orb-label orb-label-muted orb-label-above">Earth · not a graha</span>
         </div>
 
         {/* the Moon's orbit, drawn around Earth */}
@@ -258,7 +259,7 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
                         fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
                 )}
               </svg>
-              <span className="orb-label">{grahaName(g)}</span>
+              <span className="orb-label orb-label-above">{grahaName(g)}</span>
             </div>
           );
         })}

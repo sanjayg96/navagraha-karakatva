@@ -535,10 +535,9 @@ a { color: inherit; }
     0 1px 3px rgba(3, 4, 10, 1), 0 0 8px rgba(3, 4, 10, 0.98), 0 0 16px rgba(3, 4, 10, 0.85);
   transition: color 0.3s, opacity 0.3s;
 }
-/* The node markers are glyphs; their names appear only on hover, because four
-   labels inside the Earth system would be permanently tangled. */
-.orb-node .orb-label { opacity: 0; }
-.orb-node[data-on='true'] .orb-label { opacity: 1; }
+/* The nodes carry permanent labels too. They sit *above* their glyph while
+   Chandra's sits below, which is what keeps the Earth system's labels apart —
+   the Moon and a node can pass within ~28px of each other. */
 .orb-label-muted {
   font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.09em;
   color: #9b98ae; font-weight: 400;

@@ -9,11 +9,11 @@ import { useIsNarrow } from '../lib/useIsNarrow';
 /**
  * The front door.
  *
- * The headline says the grahas are not planets, and immediately below it sits a
- * solar system. That looks like a contradiction and it is meant to: the diagram is
- * the misconception, shown on purpose and labelled as such. Clicking any body
- * dissolves the orbital scaffolding and the thing stops being a planet in front of
- * you. The contradiction is the mechanism, not an oversight.
+ * The claim is additive rather than a denial: the grahas *are* these nine bodies,
+ * and the doctrine layers a great deal more on top. So the orrery below the
+ * headline is not a contradiction to be explained away — it is the starting point.
+ * Clicking a body dissolves the orbital scaffolding and opens everything else that
+ * the same force is held to be.
  */
 export function Home({ reduced }: { reduced: boolean }) {
   const narrow = useIsNarrow();
@@ -31,7 +31,7 @@ export function Home({ reduced }: { reduced: boolean }) {
     <div className="home-v2">
       <div className="hero">
         <span className="eyebrow">jyotiṣa · kārakatva</span>
-        <h1>The grahas are not <em>planets</em>.</h1>
+        <h1>The grahas are <em>more than</em> planets.</h1>
         <p className="hero-sub">
           You have met them as nine bodies in the sky. That is the least interesting
           true thing about them.
@@ -67,8 +67,8 @@ export function Home({ reduced }: { reduced: boolean }) {
                   all things that time has already worked on.
                 </p>
                 <p>
-                  So the nine bodies below are only where the names came from. Pick one and
-                  it stops being a planet.
+                  The nine bodies below are where the names came from — they are the part
+                  everyone already knows. Pick one and see what else it is held to be.
                 </p>
               </div>
             </motion.div>
@@ -93,7 +93,7 @@ export function Home({ reduced }: { reduced: boolean }) {
       <p className="orrery-caption">
         {narrow
           ? 'the nine, in the canonical order — tap one'
-          : 'the familiar picture — click one and watch it come apart'}
+          : 'the familiar picture — click one for everything else it carries'}
       </p>
       {!narrow && (
         <p className="orrery-note">

@@ -9,10 +9,10 @@ taste, a stretch of time, a way of speaking, a way of handling money.
 
 There are two ways in.
 
-**Graha-first.** The home page is an orrery. The headline says the grahas are not
-planets and a solar system sits directly beneath it — deliberately. The diagram is
-the misconception, shown on purpose; clicking any body dissolves the orbital
-scaffolding and opens that graha's ten registers. The contradiction is the mechanism.
+**Graha-first.** The home page is an orrery. The claim is additive — the grahas *are*
+these nine bodies, and the doctrine layers a great deal more on top — so the diagram
+is the starting point rather than something to argue away. Clicking any body
+dissolves the orbital scaffolding and opens that graha's ten registers.
 
 **Lens-first.** Pick a slice of ordinary life and forty-odd apparently unrelated
 things sort themselves into nine clusters in front of you. Open a cluster to read the
