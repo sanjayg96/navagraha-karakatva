@@ -10,6 +10,8 @@ export type Route =
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   if (parts[0] === 'graha' && parts[1]) return { view: 'graha', graha: parts[1], domain: parts[2] };
+  // The Spine view is gone; links to it survive as the equivalent graha page.
+  if (parts[0] === 'spine' && parts[1]) return { view: 'graha', graha: parts[1] };
   if (parts[0] === 'lens' && parts[1]) return { view: 'lens', domain: parts[1], graha: parts[2] };
   if (parts[0] === 'today') return { view: 'today' };
   if (parts[0] === 'about') return { view: 'about' };
