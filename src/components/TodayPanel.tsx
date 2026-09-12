@@ -3,6 +3,7 @@ import { GRAHAS } from '../data/grahas';
 import type { GrahaId } from '../data/types';
 import { computeHoras, fmtTime, type HoraState } from '../lib/hora';
 import { navigate } from '../router';
+import { grahaName, grahaShort } from '../lib/names';
 
 /** What each planetary hour is traditionally considered suitable for. */
 const HORA_USE: Record<GrahaId, { good: string; weak: string }> = {
@@ -58,17 +59,14 @@ export function TodayPanel() {
       <div className="today-card">
         <span className="today-label">{DAY_NAMES[h.varaDate.getDay()]} — ruled by</span>
         <div className="today-big" style={{ marginTop: 8 }}>
-          <span className="pn-sa" style={{ color: vara.color.core }}>{vara.sanskrit}</span>
-          <span className="pn-iast">{vara.iast}</span>
-          <span className="pn-en">{vara.english}</span>
+          <span className="pn-iast" style={{ color: vara.color.core }}>{grahaName(vara)}</span>
         </div>
         <div className="pn-principle" style={{ color: vara.color.core, marginTop: 8 }}>{vara.principle}</div>
 
         <div style={{ marginTop: 26 }}>
           <span className="today-label">horā now — {fmtTime(cur.start)} to {fmtTime(cur.end)}{cur.night ? ' · night' : ''}</span>
           <div className="today-big" style={{ marginTop: 8 }}>
-            <span className="pn-sa" style={{ color: curG.color.core, fontSize: 34 }}>{curG.sanskrit}</span>
-            <span className="pn-iast" style={{ fontSize: 23 }}>{curG.iast}</span>
+            <span className="pn-iast" style={{ color: curG.color.core, fontSize: 26 }}>{grahaName(curG)}</span>
           </div>
           <ul className="pn-list" style={{ marginTop: 12 }}>
             <li><strong style={{ color: '#7fd9a8', fontWeight: 500 }}>good for</strong> — {use.good}</li>
@@ -78,7 +76,7 @@ export function TodayPanel() {
 
         <div className="hora-strip" style={{ marginTop: 22 }}>
           {h.slots.map((s, i) => (
-            <div className="hora-cell" key={i} data-now={i === h.currentIndex} title={`${GRAHAS[s.graha].iast} · ${fmtTime(s.start)}–${fmtTime(s.end)}`}>
+            <div className="hora-cell" key={i} data-now={i === h.currentIndex} title={`${grahaShort(GRAHAS[s.graha])} · ${fmtTime(s.start)}–${fmtTime(s.end)}`}>
               <span className="band-dot" style={{ background: GRAHAS[s.graha].color.core, color: GRAHAS[s.graha].color.core }} />
               {/* 24 labels do not fit; show the current horā plus a few anchors. */}
               <span>{i === h.currentIndex || i % 6 === 0 ? fmtTime(s.start).replace(/^0/, '') : '·'}</span>
@@ -115,7 +113,7 @@ export function TodayPanel() {
 
       <p style={{ marginTop: 26 }}>
         <button className="ghost-btn" onClick={() => navigate({ view: 'spine', graha: h.vara })}>
-          see {vara.iast} across all ten lenses →
+          see {grahaShort(vara)} across all ten lenses →
         </button>
       </p>
     </div>

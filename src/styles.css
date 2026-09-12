@@ -20,7 +20,6 @@
 
   --display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --deva: 'Noto Serif Devanagari', 'Cormorant Garamond', serif;
   --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
 
   --stage-max: 1200px;
@@ -118,7 +117,6 @@ a { color: inherit; }
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
   color: var(--ink-dim); text-transform: lowercase;
 }
-.deva { font-family: var(--deva); }
 .rule { height: 1px; background: var(--hair); border: 0; margin: 0; }
 
 /* =========================================================
@@ -185,7 +183,8 @@ a { color: inherit; }
 .lens-card:hover .lens-sub { color: var(--ink-dim); }
 
 .home-foot {
-  margin-top: 58px; padding-top: 22px; border-top: 1px solid var(--hair-soft);
+  max-width: 68ch; margin: 10px auto 0; padding: 22px 24px 46px;
+  border-top: 1px solid var(--hair-soft);
   font-size: 12.5px; color: var(--ink-faint); max-width: 68ch; line-height: 1.66;
 }
 .home-foot a { color: var(--ink-dim); text-decoration: underline; text-decoration-color: var(--ink-ghost); }
@@ -195,9 +194,10 @@ a { color: inherit; }
   .hdr { padding: 13px 16px 11px; gap: 10px; flex-wrap: nowrap; }
   /* The strapline and the share button cost three header lines on a phone. */
   .hdr-sub { display: none; }
-  .hdr-mark { font-size: 16px; letter-spacing: 0.1em; }
-  .hdr-nav { gap: 0; }
-  .hdr-nav button { padding: 6px 7px; font-size: 9.5px; letter-spacing: 0.1em; }
+  /* Five nav items plus the wordmark do not fit one line on a phone without this. */
+  .hdr-mark { font-size: 14px; letter-spacing: 0.06em; }
+  .hdr-nav { gap: 0; flex-wrap: nowrap; }
+  .hdr-nav button { padding: 6px 5px; font-size: 9px; letter-spacing: 0.04em; }
   .hdr-nav .ghost-btn { display: none; }
   .lens-grid { grid-template-columns: 1fr 1fr; }
   .lens-card { min-height: 108px; padding: 16px 14px; }
@@ -216,7 +216,7 @@ a { color: inherit; }
   padding: 14px 28px; border-bottom: 1px solid var(--hair-soft); flex-wrap: wrap;
 }
 .lens-bar-title { font-family: var(--display); font-size: 25px; line-height: 1.1; }
-.lens-bar-q { font-size: 13px; color: var(--ink-faint); font-style: italic; font-family: var(--display); font-size: 16px; }
+.lens-bar-q { font-family: var(--ui); font-size: 14px; line-height: 1.5; color: var(--ink-dim); }
 .lens-bar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
 .count {
   font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em;
@@ -234,7 +234,7 @@ a { color: inherit; }
 .stage-wrap { flex: 1; position: relative; overflow: hidden; min-height: 520px; }
 .stage {
   position: absolute; top: 50%; left: 50%;
-  width: 1300px; height: 960px;
+  width: 1500px; height: 830px;
   transform-origin: center center;
 }
 .stage-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
@@ -257,27 +257,27 @@ a { color: inherit; }
   box-shadow: 0 0 10px 2px currentColor;
 }
 .node-label {
-  position: absolute; left: 50%; transform: translateX(-50%);
-  text-align: center; white-space: nowrap; pointer-events: none;
+  position: absolute; text-align: center; white-space: nowrap; pointer-events: none;
   transition: opacity 0.3s;
+  /* Labels sit over the node's bloom and its connector lines; the shadow is what
+     keeps them readable against both. */
+  text-shadow: 0 1px 3px rgba(3, 4, 10, 0.95), 0 0 10px rgba(3, 4, 10, 0.8);
 }
-.node-label-sa { font-family: var(--deva); font-size: 17px; line-height: 1.1; }
-.node-label-en {
-  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-faint); margin-top: 3px;
+.node-label-name {
+  font-family: var(--ui); font-size: 13px; font-weight: 500; line-height: 1.2;
+  letter-spacing: 0.01em; white-space: nowrap;
 }
 .node-count {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--ink-ghost); margin-top: 2px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-ghost); margin-top: 3px;
 }
-.node:hover .node-label-en { color: var(--ink-dim); }
 
 /* ---------- chip ---------- */
 
 .chip {
-  padding: 4px 11px; border-radius: 20px; white-space: nowrap; cursor: pointer;
-  font-size: 13.5px; line-height: 1.34;
+  padding: 5px 13px; border-radius: 20px; white-space: nowrap; cursor: pointer;
+  font-size: 15px; line-height: 1.36;
   border: 1px solid;
-  max-width: 210px; overflow: hidden; text-overflow: ellipsis;
+  max-width: 240px; overflow: hidden; text-overflow: ellipsis;
   display: inline-block;
 }
 /* On the mandala a chip hangs off a zero-size anchor that framer animates, so the
@@ -301,15 +301,11 @@ a { color: inherit; }
 
 /* ---------- mobile: ring becomes stacked bands ---------- */
 
-.bands { padding: 10px 0 60px; }
+.bands { padding: 10px 0 60px; flex: 1; min-width: 0; overflow-y: auto; }
 .band { border-bottom: 1px solid var(--hair-soft); padding: 14px 18px 16px; }
 .band-hd { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; cursor: pointer; }
 .band-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; box-shadow: 0 0 9px 1px currentColor; }
-.band-name { font-family: var(--deva); font-size: 16px; }
-.band-en {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--ink-faint);
-}
+.band-name { font-family: var(--ui); font-size: 15px; font-weight: 500; }
 .band-n { margin-left: auto; font-family: var(--mono); font-size: 9.5px; color: var(--ink-ghost); }
 .band-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .band-chips .chip { max-width: none; }
@@ -334,19 +330,14 @@ a { color: inherit; }
 .panel-x:hover { color: var(--gold); }
 
 .pn-name { display: flex; align-items: flex-end; gap: 13px; flex-wrap: wrap; }
-.pn-sa { font-family: var(--deva); font-size: 40px; line-height: 1; }
-.pn-iast { font-family: var(--display); font-size: 29px; letter-spacing: 0.03em; }
-.pn-en {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--ink-faint); padding-bottom: 5px;
-}
+.pn-iast { font-family: var(--display); font-size: 34px; letter-spacing: 0.02em; line-height: 1.1; }
 .pn-principle { margin-top: 11px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; }
 .pn-essence { margin-top: 18px; font-size: 14.5px; line-height: 1.72; color: var(--ink-dim); }
 
 .pn-thread {
   margin-top: 22px; padding: 17px 19px; border-left: 2px solid;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.035), transparent 80%);
-  font-family: var(--display); font-size: 18.5px; line-height: 1.56; font-style: italic; color: var(--ink);
+  font-family: var(--ui); font-size: 15px; line-height: 1.62; color: var(--ink);
 }
 .pn-thread .eyebrow { display: block; margin-bottom: 7px; font-style: normal; }
 
@@ -386,8 +377,7 @@ a { color: inherit; }
   .panel { width: 100%; border-left: none; }
   .panel-in { padding: 20px 18px 60px; }
   .pn-two { grid-template-columns: 1fr; gap: 18px; }
-  .pn-sa { font-size: 32px; }
-  .pn-iast { font-size: 24px; }
+  .pn-iast { font-size: 26px; }
 }
 
 /* =========================================================
@@ -411,8 +401,8 @@ a { color: inherit; }
 .spine-dom-t { font-family: var(--display); font-size: 18px; line-height: 1.2; }
 .spine-dom-n { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; color: var(--ink-ghost); margin-top: 4px; }
 .spine-body .spine-note {
-  font-family: var(--display); font-style: italic; font-size: 16.5px; line-height: 1.55;
-  color: var(--ink); margin-bottom: 11px;
+  font-family: var(--ui); font-size: 15px; line-height: 1.62;
+  color: var(--ink); margin-bottom: 12px; max-width: 68ch;
 }
 .spine-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .spine-chips .chip { max-width: none; cursor: default; }
@@ -453,7 +443,7 @@ a { color: inherit; }
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.035), transparent 65%);
 }
 .today-big { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
-.today-big .pn-sa { font-size: 44px; }
+.today-big .pn-iast { font-size: 38px; }
 .today-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); }
 .hora-strip { display: flex; margin-top: 24px; border: 1px solid var(--hair-soft); overflow: hidden; }
 .hora-cell {
@@ -490,4 +480,287 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .grain { opacity: 0.22; }
+}
+
+/* =========================================================
+   LENS RAIL — sideways movement between lenses
+   ========================================================= */
+
+.lens-body { flex: 1; display: flex; min-height: 0; }
+
+.rail {
+  flex: none; width: 176px; border-right: 1px solid var(--hair-soft);
+  padding: 16px 0 20px; overflow-y: auto;
+}
+.rail-hd { display: block; padding: 0 16px 10px; }
+.rail-list { display: flex; flex-direction: column; }
+.rail-item {
+  display: flex; align-items: baseline; gap: 9px;
+  padding: 8px 16px; text-align: left; position: relative;
+  color: var(--ink-faint); transition: color 0.2s, background 0.2s;
+}
+.rail-item:hover { color: var(--ink); background: rgba(255, 255, 255, 0.035); }
+.rail-item[data-on='true'] { color: var(--gold); background: rgba(201, 169, 97, 0.07); }
+.rail-item[data-on='true']::before {
+  content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2px; background: var(--gold);
+}
+.rail-num { font-family: var(--mono); font-size: 9.5px; color: var(--ink-ghost); flex: none; }
+.rail-item[data-on='true'] .rail-num { color: var(--gold-lo); }
+.rail-name { font-size: 13.5px; line-height: 1.3; }
+
+@media (max-width: 760px) {
+  .lens-body { flex-direction: column; }
+  .rail {
+    width: auto; border-right: none; border-bottom: 1px solid var(--hair-soft);
+    padding: 10px 0; overflow-x: auto; overflow-y: hidden;
+  }
+  .rail-hd { display: none; }
+  .rail-list { flex-direction: row; gap: 2px; padding: 0 12px; }
+  .rail-item { padding: 7px 12px; border-radius: 3px; white-space: nowrap; }
+  .rail-item[data-on='true']::before { display: none; }
+  .rail-item[data-on='true'] { border: 1px solid var(--gold-lo); }
+  .rail-num { display: none; }
+}
+
+/* =========================================================
+   ORRERY — the home page front door
+   ========================================================= */
+
+.orrery-wrap { position: relative; width: 100%; height: clamp(360px, 52vh, 580px); }
+.orrery {
+  position: absolute; top: 50%; left: 50%;
+  width: 1180px; height: 600px;
+  transform-origin: center center;
+  transition: opacity 0.7s ease, filter 0.7s ease;
+}
+/* When a graha is picked, the whole "solar system" reading falls away. */
+.orrery[data-dissolving='true'] { opacity: 0; filter: blur(6px); pointer-events: none; }
+.orrery[data-dissolving='true'] .orbit-ring { opacity: 0; }
+
+.orrery-rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; }
+.orbit-ring {
+  fill: none; stroke: rgba(201, 169, 97, 0.17); stroke-width: 1;
+  transition: opacity 0.6s ease;
+}
+
+.orb {
+  position: absolute; top: 0; left: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; will-change: transform;
+}
+.orb-earth, .lunar-ring { cursor: default; }
+
+.orb-hit { position: absolute; border-radius: 50%; }
+.orb-glow {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  filter: blur(13px); opacity: 0.62; transition: opacity 0.35s, transform 0.35s;
+}
+.orb-body {
+  position: relative; border-radius: 50%; pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.orb-ring {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  border: 1.5px solid; opacity: 0.55;
+  transform: rotate(-14deg);
+}
+.node-glyph { position: relative; width: 30px; height: 30px; pointer-events: none; }
+
+/* Any two orbiting bodies can line up in projection, so labels are kept quiet
+   enough that an occasional overlap reads as depth rather than as breakage. */
+.orb-label {
+  position: absolute; top: 100%; left: 50%; transform: translate(-50%, 9px);
+  font-family: var(--ui); font-size: 12px; font-weight: 500; white-space: nowrap;
+  color: var(--ink-faint); pointer-events: none;
+  text-shadow: 0 1px 4px rgba(3, 4, 10, 0.98), 0 0 9px rgba(3, 4, 10, 0.9);
+  transition: color 0.3s, opacity 0.3s;
+}
+/* The node markers are glyphs; their names appear only on hover, because four
+   labels inside the Earth system would be permanently tangled. */
+.orb-node .orb-label { opacity: 0; }
+.orb-node[data-on='true'] .orb-label { opacity: 1; }
+.orb-label-muted {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  color: var(--ink-ghost); font-weight: 400;
+}
+.orb-label-above { top: auto; bottom: 100%; transform: translate(-50%, -9px); }
+.orb[data-on='true'] { z-index: 200 !important; }
+.orb[data-on='true'] .orb-label { color: var(--ink); }
+.orb[data-on='true'] .orb-glow { opacity: 1; transform: scale(1.25); }
+.orb[data-on='true'] .orb-body { transform: scale(1.16); }
+.orb:focus-visible { outline: none; }
+.orb:focus-visible .orb-body { box-shadow: 0 0 0 2px var(--gold) !important; }
+
+.lunar-ring { z-index: 2; }
+.lunar-ring span {
+  display: block; border-radius: 50%;
+  border: 1px dashed rgba(216, 230, 245, 0.22);
+}
+
+/* ---------- home hero ---------- */
+
+.hero { max-width: 1120px; margin: 0 auto; padding: 40px 28px 0; width: 100%; }
+.hero h1 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(34px, 5.4vw, 58px); line-height: 1.04;
+  margin: 14px 0 0; letter-spacing: -0.01em;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-sub {
+  font-size: 17px; line-height: 1.6; color: var(--ink-dim);
+  margin: 18px 0 0; max-width: 54ch;
+}
+
+.disclose {
+  margin: 22px 0 0; font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint);
+  border: 1px solid var(--hair); padding: 9px 15px; border-radius: 3px;
+  display: inline-flex; align-items: center; gap: 9px;
+  transition: color 0.25s, border-color 0.25s;
+}
+.disclose:hover { color: var(--gold); border-color: var(--gold-lo); }
+.disclose span { transition: transform 0.3s; font-size: 9px; }
+.disclose[data-open='true'] span { transform: rotate(180deg); }
+
+.disclosed { overflow: hidden; }
+.disclosed-in { padding-top: 22px; max-width: 66ch; }
+.disclosed-in p { font-size: 15.5px; line-height: 1.68; color: var(--ink-dim); margin: 0 0 14px; }
+.disclosed-in p strong { color: var(--ink); font-weight: 500; }
+
+.hero-cta {
+  margin: 30px 0 6px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  font-size: 14px; color: var(--ink-dim);
+}
+.hero-cta b { color: var(--ink); font-weight: 500; }
+.hero-cta .sep { color: var(--ink-ghost); }
+.hero-cta button {
+  color: var(--gold); border-bottom: 1px solid var(--gold-lo); padding-bottom: 1px;
+  transition: border-color 0.25s;
+}
+.hero-cta button:hover { border-color: var(--gold); }
+
+.orrery-caption {
+  text-align: center; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-ghost);
+  margin-top: 4px;
+}
+.orrery-note {
+  text-align: center; font-size: 12.5px; line-height: 1.6; color: var(--ink-faint);
+  max-width: 62ch; margin: 12px auto 0; padding: 0 24px 40px;
+}
+
+@media (max-width: 760px) {
+  .hero { padding: 26px 18px 0; }
+  .hero-sub { font-size: 15.5px; }
+  .orrery-wrap { height: clamp(300px, 46vh, 420px); }
+  .orb-label { font-size: 11px; transform: translate(-50%, 7px); }
+}
+
+/* =========================================================
+   GRAHA GATEWAY — half-body left, ten lenses right
+   ========================================================= */
+
+.gate { flex: 1; display: flex; min-height: 0; position: relative; }
+
+.gate-orb {
+  flex: none; width: 30%; min-width: 200px; position: relative; overflow: hidden;
+}
+/* Centred exactly on the left edge, so the column shows precisely half the disc
+   and the body reads as continuing off-screen. */
+.gate-disc {
+  position: absolute; top: 50%; left: 0;
+  width: 200%; aspect-ratio: 1; border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.gate-bloom {
+  position: absolute; top: 50%; left: 0; width: 260%; aspect-ratio: 1;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  filter: blur(54px); pointer-events: none;
+}
+
+.gate-panel {
+  flex: 1; min-width: 0; overflow-y: auto;
+  padding: 30px 40px 70px 46px;
+}
+.gate-back { margin-bottom: 24px; }
+.gate-name {
+  font-family: var(--display); font-weight: 400; font-size: clamp(30px, 4.2vw, 46px);
+  line-height: 1.05; margin: 0 0 10px;
+}
+.gate-essence {
+  font-size: 15px; line-height: 1.72; color: var(--ink-dim); margin: 18px 0 0; max-width: 60ch;
+}
+.gate-lenses-hd { display: flex; align-items: baseline; gap: 14px; margin: 36px 0 14px; }
+.gate-lenses-hd .rule { flex: 1; }
+
+.gate-lenses { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.gate-lens {
+  display: flex; align-items: baseline; gap: 11px; text-align: left;
+  padding: 14px 16px; border: 1px solid; border-radius: 3px;
+  background: rgba(255, 255, 255, 0.018);
+  transition: background 0.25s, transform 0.25s;
+}
+.gate-lens:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-1px); }
+.gate-lens-num { font-family: var(--mono); font-size: 9.5px; color: var(--ink-ghost); flex: none; }
+.gate-lens-title { font-family: var(--display); font-size: 19px; line-height: 1.15; flex: 1; }
+.gate-lens-n { font-family: var(--mono); font-size: 11px; flex: none; }
+.gate-foot { margin-top: 30px; }
+
+/* ---------- the exploded cell ---------- */
+
+.cell-scrim { position: fixed; inset: 0; z-index: 44; background: rgba(3, 4, 10, 0.74); backdrop-filter: blur(3px); }
+.cell-wrap {
+  position: fixed; inset: 0; z-index: 46;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; pointer-events: none;
+}
+.cell {
+  pointer-events: auto;
+  width: min(720px, 100%); max-height: min(86vh, 900px);
+  overflow-y: auto; border: 1px solid;
+  background: linear-gradient(180deg, var(--void-2), var(--void) 70%);
+  box-shadow: 0 40px 110px rgba(0, 0, 0, 0.7);
+}
+.cell-in { padding: 26px 32px 40px; }
+.cell-title { font-family: var(--display); font-weight: 400; font-size: 32px; margin: 8px 0 0; line-height: 1.1; }
+.cell-cta { margin-top: 30px; }
+
+@media (max-width: 860px) {
+  .gate { flex-direction: column; }
+  .gate-orb { width: 100%; height: 150px; min-width: 0; }
+  .gate-disc { top: 50%; left: 50%; width: 340px; margin-left: 0; transform: translate(-50%, -30%); }
+  .gate-bloom { left: 50%; width: 460px; transform: translate(-50%, -30%); }
+  .gate-panel { padding: 22px 18px 60px; }
+  .gate-lenses { grid-template-columns: 1fr 1fr; }
+  .cell-in { padding: 20px 18px 34px; }
+  .cell-title { font-size: 25px; }
+}
+
+/* =========================================================
+   GRAHA GRID — the orrery's narrow-screen replacement
+   ========================================================= */
+
+.ggrid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--hair-soft); border-top: 1px solid var(--hair-soft);
+  border-bottom: 1px solid var(--hair-soft); margin-top: 26px;
+}
+.ggrid-cell {
+  position: relative; overflow: hidden;
+  background: rgba(6, 8, 18, 0.75);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px;
+  padding: 20px 6px 16px; min-height: 118px;
+}
+.ggrid-glow {
+  position: absolute; top: 34%; left: 50%; width: 96px; height: 96px;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  filter: blur(15px); opacity: 0.6; pointer-events: none;
+}
+.ggrid-body {
+  position: relative; width: 34px; height: 34px; border-radius: 50%; flex: none;
+}
+.ggrid-name {
+  position: relative; font-size: 11.5px; font-weight: 500; line-height: 1.25;
+  color: var(--ink-dim); text-align: center;
+  text-shadow: 0 1px 3px rgba(3, 4, 10, 0.95);
 }

@@ -4,6 +4,7 @@ import type { Domain, GrahaId } from '../data/types';
 import { hexA } from '../lib/color';
 import { navigate } from '../router';
 import { ChipPill } from './Chip';
+import { grahaName, grahaShort } from '../lib/names';
 
 interface Props {
   domain: Domain;
@@ -36,9 +37,7 @@ export function GrahaPanel({ domain, grahaId, reduced, onClose }: Props) {
           <button className="panel-x" onClick={onClose} aria-label="Close">✕</button>
 
           <div className="pn-name">
-            <span className="pn-sa" style={{ color: g.color.core }}>{g.sanskrit}</span>
-            <span className="pn-iast">{g.iast}</span>
-            <span className="pn-en">{g.english}</span>
+            <span className="pn-iast" style={{ color: g.color.core }}>{grahaName(g)}</span>
           </div>
           <div className="pn-principle" style={{ color: g.color.core }}>{g.principle}</div>
           <p className="pn-essence">{g.essence}</p>
@@ -92,7 +91,7 @@ export function GrahaPanel({ domain, grahaId, reduced, onClose }: Props) {
 
           <div className="pn-cta">
             <button className="ghost-btn" onClick={() => navigate({ view: 'spine', graha: g.id })}>
-              see {g.iast} across all ten lenses →
+              see {grahaShort(g)} across all ten lenses →
             </button>
           </div>
         </div>

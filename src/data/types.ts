@@ -12,6 +12,8 @@ export interface Graha {
   sanskrit: string;
   iast: string;
   english: string;
+  /** Compact gloss for tight labels — only the nodes need one. */
+  englishShort?: string;
   /** Four words. The force itself, stripped of personality. */
   principle: string;
   /** What this force actually is, before it becomes any particular thing. */

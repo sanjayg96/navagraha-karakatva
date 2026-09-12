@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 export type Route =
   | { view: 'home' }
+  | { view: 'graha'; graha: string; domain?: string }
   | { view: 'lens'; domain: string; graha?: string }
   | { view: 'spine'; graha: string }
   | { view: 'today' }
@@ -9,6 +10,7 @@ export type Route =
 
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+  if (parts[0] === 'graha' && parts[1]) return { view: 'graha', graha: parts[1], domain: parts[2] };
   if (parts[0] === 'lens' && parts[1]) return { view: 'lens', domain: parts[1], graha: parts[2] };
   if (parts[0] === 'spine' && parts[1]) return { view: 'spine', graha: parts[1] };
   if (parts[0] === 'today') return { view: 'today' };
@@ -18,6 +20,7 @@ export function parseHash(hash: string): Route {
 
 export function toHash(r: Route): string {
   switch (r.view) {
+    case 'graha': return `#/graha/${r.graha}${r.domain ? `/${r.domain}` : ''}`;
     case 'lens': return `#/lens/${r.domain}${r.graha ? `/${r.graha}` : ''}`;
     case 'spine': return `#/spine/${r.graha}`;
     case 'today': return '#/today';

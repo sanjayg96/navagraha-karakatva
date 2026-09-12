@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { GRAHAS } from '../data/grahas';
 import { GRAHA_ORDER, type Domain, type GrahaId, type Item } from '../data/types';
-import { STAGE, NODE_RADIUS, grahaNodePositions, solveChipPositions, seedFrom } from '../lib/layout';
+import { STAGE, NODE_RADIUS, grahaNodePositions, grahaLabelPositions, solveChipPositions, seedFrom } from '../lib/layout';
 import { hexA } from '../lib/color';
 import { GrahaNode } from './GrahaNode';
 import { ChipPill } from './Chip';
+import { grahaName, grahaShort } from '../lib/names';
 
 /* Timing of the three beats. Tuned by eye — see notes in the readme. */
 const HOLD_MS = 520;        // how long the mess is held before it resolves
@@ -30,6 +31,7 @@ export function Mandala({ domain, resortKey, reduced, onPickGraha }: Props) {
     [domain.id, domain.items],
   );
   const nodes = useMemo(() => grahaNodePositions(), []);
+  const labels = useMemo(() => grahaLabelPositions(), []);
   const counts = useMemo(() => {
     const m = {} as Record<GrahaId, number>;
     for (const g of GRAHA_ORDER) m[g] = 0;
@@ -107,20 +109,16 @@ export function Mandala({ domain, resortKey, reduced, onPickGraha }: Props) {
         ))}
 
         {/* Labels sit inward of the ring so they never collide with the clusters. */}
-        {nodes.map((n) => {
-          const rad = (n.angle * Math.PI) / 180;
-          const lx = STAGE.cx + Math.cos(rad) * (NODE_RADIUS - 52);
-          const ly = STAGE.cy + Math.sin(rad) * (NODE_RADIUS - 52);
-          const g = GRAHAS[n.graha];
+        {labels.map((lb) => {
+          const g = GRAHAS[lb.graha];
           return (
             <div
-              key={`lb-${n.graha}`}
+              key={`lb-${lb.graha}`}
               className="node-label"
-              style={{ left: lx, top: ly, transform: 'translate(-50%, -50%)', color: g.color.core }}
+              style={{ left: lb.x, top: lb.y, transform: 'translate(-50%, -50%)', color: g.color.core }}
             >
-              <div className="node-label-sa">{g.sanskrit}</div>
-              <div className="node-label-en">{g.iast}</div>
-              <div className="node-count">{counts[n.graha]}</div>
+              <div className="node-label-name">{grahaName(g)}</div>
+              <div className="node-count">{counts[lb.graha]}</div>
             </div>
           );
         })}
@@ -174,7 +172,7 @@ export function Mandala({ domain, resortKey, reduced, onPickGraha }: Props) {
           <b>{tip.item.label}</b>
           {tip.item.note}
           <i>
-            {GRAHAS[tip.item.graha].iast}
+            {grahaShort(GRAHAS[tip.item.graha])}
             {tip.item.extension ? ' · reasoned extension' : ''}
           </i>
         </div>

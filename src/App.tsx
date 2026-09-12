@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Starfield } from './components/Starfield';
-import { LensPicker } from './components/LensPicker';
+import { Home } from './components/Home';
 import { Mandala } from './components/Mandala';
 import { Bands } from './components/Bands';
+import { LensRail } from './components/LensRail';
 import { GrahaPanel } from './components/GrahaPanel';
+import { GrahaGateway } from './components/GrahaGateway';
 import { SpineView } from './components/SpineView';
 import { TodayPanel } from './components/TodayPanel';
 import { About } from './components/About';
@@ -13,16 +15,7 @@ import { DOMAIN_MAP } from './data/domains';
 import { GRAHAS } from './data/grahas';
 import { navigate, useRoute, usePrefersReducedMotion } from './router';
 import type { GrahaId } from './data/types';
-
-function useIsNarrow(px = 760) {
-  const [narrow, setNarrow] = useState(() => window.innerWidth < px);
-  useEffect(() => {
-    const on = () => setNarrow(window.innerWidth < px);
-    window.addEventListener('resize', on);
-    return () => window.removeEventListener('resize', on);
-  }, [px]);
-  return narrow;
-}
+import { useIsNarrow } from './lib/useIsNarrow';
 
 export function App() {
   const route = useRoute();
@@ -42,6 +35,7 @@ export function App() {
   useEffect(() => {
     if (route.view === 'lens' && !DOMAIN_MAP[route.domain]) navigate({ view: 'home' });
     if (route.view === 'spine' && !(route.graha in GRAHAS)) navigate({ view: 'spine', graha: 'shani' });
+    if (route.view === 'graha' && !(route.graha in GRAHAS)) navigate({ view: 'home' });
   }, [route]);
 
   return (
@@ -57,7 +51,8 @@ export function App() {
           </span>
           <span className="hdr-sub">kārakatva · the map of significations</span>
           <nav className="hdr-nav">
-            <button data-on={route.view === 'home' || route.view === 'lens'} onClick={() => navigate({ view: 'home' })}>Lenses</button>
+            <button data-on={route.view === 'home' || route.view === 'graha'} onClick={() => navigate({ view: 'home' })}>Grahas</button>
+            <button data-on={route.view === 'lens'} onClick={() => navigate({ view: 'lens', domain: 'body' })}>Lenses</button>
             <button data-on={route.view === 'spine'} onClick={() => navigate({ view: 'spine', graha: 'shani' })}>Spine</button>
             <button data-on={route.view === 'today'} onClick={() => navigate({ view: 'today' })}>Today</button>
             <button data-on={route.view === 'about'} onClick={() => navigate({ view: 'about' })}>About</button>
@@ -65,7 +60,14 @@ export function App() {
           </nav>
         </header>
 
-        {route.view === 'home' && <LensPicker />}
+        {route.view === 'home' && <Home reduced={reduced} />}
+        {route.view === 'graha' && route.graha in GRAHAS && (
+          <GrahaGateway
+            grahaId={route.graha as GrahaId}
+            domainId={route.domain && DOMAIN_MAP[route.domain] ? route.domain : undefined}
+            reduced={reduced}
+          />
+        )}
         {route.view === 'about' && <About />}
         {route.view === 'today' && <TodayPanel />}
         {route.view === 'spine' && route.graha in GRAHAS && (
@@ -75,7 +77,7 @@ export function App() {
         {route.view === 'lens' && domain && (
           <div className="lens-view">
             <div className="lens-bar">
-              <button className="ghost-btn" onClick={() => navigate({ view: 'home' })}>← lenses</button>
+              <button className="ghost-btn" onClick={() => navigate({ view: 'home' })}>← grahas</button>
               <span className="lens-bar-title">{domain.title}</span>
               <span className="lens-bar-q">{domain.question}</span>
               <span className="lens-bar-right">
@@ -83,17 +85,20 @@ export function App() {
                 <button className="ghost-btn" onClick={() => setResortKey((k) => k + 1)}>re-sort</button>
               </span>
             </div>
-            {narrow ? (
-              <Bands
-                domain={domain} resortKey={resortKey} reduced={reduced}
-                onPickGraha={(g) => navigate({ view: 'lens', domain: domain.id, graha: g })}
-              />
-            ) : (
-              <Mandala
-                domain={domain} resortKey={resortKey} reduced={reduced}
-                onPickGraha={(g) => navigate({ view: 'lens', domain: domain.id, graha: g })}
-              />
-            )}
+            <div className="lens-body">
+              <LensRail current={domain.id} />
+              {narrow ? (
+                <Bands
+                  domain={domain} resortKey={resortKey} reduced={reduced}
+                  onPickGraha={(g) => navigate({ view: 'lens', domain: domain.id, graha: g })}
+                />
+              ) : (
+                <Mandala
+                  domain={domain} resortKey={resortKey} reduced={reduced}
+                  onPickGraha={(g) => navigate({ view: 'lens', domain: domain.id, graha: g })}
+                />
+              )}
+            </div>
           </div>
         )}
       </div>

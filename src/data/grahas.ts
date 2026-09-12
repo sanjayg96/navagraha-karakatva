@@ -308,6 +308,7 @@ export const GRAHAS: Record<GrahaId, Graha> = {
     sanskrit: 'राहु',
     iast: 'Rāhu',
     english: 'north lunar node',
+    englishShort: 'north node',
     principle: 'amplification · craving · novelty · distortion',
     essence:
       'A mouth with no body — appetite that cannot be satisfied because there is nothing behind it to fill. Rāhu amplifies whatever it attaches to and removes that thing’s natural limit. It is how the foreign, the obsessive and the spectacular enter a life, and it is genuinely how many people arrive somewhere they could never have reasoned their way to.',
@@ -351,6 +352,7 @@ export const GRAHAS: Record<GrahaId, Graha> = {
     sanskrit: 'केतु',
     iast: 'Ketu',
     english: 'south lunar node',
+    englishShort: 'south node',
     principle: 'subtraction · detachment · residue · release',
     essence:
       'A body with no mouth — capacity without appetite. Ketu is what remains when wanting stops: the mastery you no longer care about, the skill that arrives without study, the thing you can do perfectly and will not do again. It liberates by removal, which is indistinguishable from loss while it is happening.',

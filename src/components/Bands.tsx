@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { GRAHAS } from '../data/grahas';
 import { GRAHA_ORDER, type Domain, type GrahaId } from '../data/types';
 import { ChipPill } from './Chip';
+import { grahaName } from '../lib/names';
 
 /**
  * Narrow-screen form of the sort. Same three beats — scatter, hold, resolve —
@@ -33,8 +34,7 @@ export function Bands({ domain, resortKey, reduced, onPickGraha }: {
           <div className="band" key={g}>
             <div className="band-hd" onClick={() => onPickGraha(g)}>
               <span className="band-dot" style={{ background: gr.color.core, color: gr.color.core }} />
-              <span className="band-name" style={{ color: gr.color.core }}>{gr.sanskrit}</span>
-              <span className="band-en">{gr.iast}</span>
+              <span className="band-name" style={{ color: gr.color.core }}>{grahaName(gr)}</span>
               <span className="band-n">{items.length}</span>
             </div>
             <div className="band-chips">

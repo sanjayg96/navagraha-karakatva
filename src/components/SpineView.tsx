@@ -4,6 +4,7 @@ import { DOMAINS } from '../data/domains';
 import { GRAHA_ORDER, type GrahaId } from '../data/types';
 import { navigate } from '../router';
 import { ChipPill } from './Chip';
+import { grahaName, grahaShort } from '../lib/names';
 
 /**
  * One graha, restated in ten different materials. Scanning down this column is
@@ -17,9 +18,7 @@ export function SpineView({ grahaId, reduced }: { grahaId: GrahaId; reduced: boo
       <div className="spine-hd">
         <span className="eyebrow">one principle · ten materials</span>
         <div className="pn-name" style={{ marginTop: 10 }}>
-          <span className="pn-sa" style={{ color: g.color.core }}>{g.sanskrit}</span>
-          <span className="pn-iast">{g.iast}</span>
-          <span className="pn-en">{g.english}</span>
+          <span className="pn-iast" style={{ color: g.color.core }}>{grahaName(g)}</span>
         </div>
         <div className="pn-principle" style={{ color: g.color.core, marginTop: 8 }}>{g.principle}</div>
         <div className="spine-switch">
@@ -34,7 +33,7 @@ export function SpineView({ grahaId, reduced }: { grahaId: GrahaId; reduced: boo
                 onClick={() => navigate({ view: 'spine', graha: id })}
               >
                 <span className="band-dot" style={{ background: o.color.core, color: o.color.core }} />
-                {o.iast}
+                {grahaShort(o)}
               </button>
             );
           })}
