@@ -112,7 +112,7 @@ export function TodayPanel() {
       </p>
 
       <p style={{ marginTop: 26 }}>
-        <button className="ghost-btn" onClick={() => navigate({ view: 'spine', graha: h.vara })}>
+        <button className="ghost-btn" onClick={() => navigate({ view: 'graha', graha: h.vara })}>
           see {grahaShort(vara)} across all ten lenses →
         </button>
       </p>

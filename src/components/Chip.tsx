@@ -10,7 +10,7 @@ interface Props {
   dim?: boolean;
 }
 
-/** One mapped thing. Same pill is reused on the mandala, the mobile bands and the spine. */
+/** One mapped thing. The same pill is reused on the mandala, the mobile bands and in the panels. */
 export function ChipPill({ item, onEnter, onLeave, onClick, dim }: Props) {
   const g = GRAHAS[item.graha];
   return (

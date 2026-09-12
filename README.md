@@ -1,5 +1,7 @@
 # Navagraha Kārakatva
 
+### ▶ **[Open the live site → sanjayg96.github.io/navagraha-karakatva](https://sanjayg96.github.io/navagraha-karakatva/)**
+
 An interactive map of **kārakatva** — the classical doctrine that each graha is not
 primarily a planet but a *principle*, and that the same principle recurs at every
 scale of experience: in a part of the body, a kind of person, a place, a material, a
@@ -23,11 +25,10 @@ one sentence that explains why it holds together.
 | Route | What it is |
 | --- | --- |
 | `#/` | the orrery (a 3x3 grid on narrow screens) |
-| `#/graha/:id` | one graha: half-body left, its ten lenses right |
+| `#/graha/:id` | one graha: half-body left, its ten lenses and its levers right |
 | `#/graha/:id/:domain` | one (graha x lens) cell, opened out of its row |
 | `#/lens/:domain` | the sorting mandala, with a rail for moving between lenses |
 | `#/lens/:domain/:graha` | one cluster, in detail |
-| `#/spine/:graha` | one graha across all ten lenses — the "it rhymes" view |
 | `#/today` | the weekday ruler and the live planetary hour |
 | `#/about` | sources, method, and what this is not |
 
@@ -45,7 +46,18 @@ them from colliding at arbitrary viewport widths.
   vertically than a column is tall, so they can only be separated horizontally.
 - **Orrery** (`src/lib/orbits.ts`): the view is tilted, so orbits are ellipses. Each
   orbit's *minor* axis has to clear the Sun's disc or an inner planet passes through
-  the Sun at the top and bottom of its path.
+  the Sun at the top and bottom of its path. A node is a point *on* the Moon's orbit,
+  so the Moon passes exactly through one twice a cycle — correct, and the reason
+  eclipses happen there, but it buries the marker, so the marker slides clear.
+
+Planets are drawn with procedural SVG (`src/components/PlanetSphere.tsx`):
+feTurbulence for surface mottling, a displacement map to warp the gas giants' belts.
+That keeps them sharp from 26px on the orrery to 800px on the gateway disc, and
+costs no network request inside a published artifact.
+
+The textures show the bodies as they actually look; the accent colour for each graha
+is the one the *texts* assign (Budha is green for dūrvā grass, whatever colour
+Mercury happens to be). Both are shown, and About explains why they differ.
 
 Geometry is verified by measuring bounding boxes in the browser rather than by
 arithmetic — see the verification notes in the plan file.

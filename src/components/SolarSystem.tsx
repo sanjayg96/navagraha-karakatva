@@ -2,9 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { GRAHAS } from '../data/grahas';
 import type { GrahaId } from '../data/types';
 import { grahaName } from '../lib/names';
+import { PlanetSphere } from './PlanetSphere';
+import { TEXTURES } from '../lib/textures';
 import {
   ORBIT_STAGE, TILT, BODIES, LUNAR, NODES, SATURN_RING, orbitPos, depthZ,
 } from '../lib/orbits';
+
+/** Minimum gap kept between a node marker and the Moon, in stage units. */
+const NODE_CLEARANCE = 38;
 
 /** Angle used for every body when motion is switched off — a pleasant spread. */
 const FROZEN_T = 3.2;
@@ -38,7 +43,8 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
     if (!el) return;
     const fit = () => {
       const r = el.getBoundingClientRect();
-      setScale(Math.min(r.width / ORBIT_STAGE.w, r.height / ORBIT_STAGE.h, 1));
+      // Allowed above 1 so large displays actually use their width.
+      setScale(Math.min(r.width / ORBIT_STAGE.w, r.height / ORBIT_STAGE.h, 1.2));
     };
     fit();
     const ro = new ResizeObserver(fit);
@@ -64,16 +70,30 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
 
       // Moon and the two nodes ride on Earth.
       const moon = orbitPos(LUNAR, t);
-      set('chandra', earth.x + moon.x, earth.y + moon.y, depthZ(earth.angle) + 6);
+      const moonX = earth.x + moon.x;
+      const moonY = earth.y + moon.y;
+      set('chandra', moonX, moonY, depthZ(earth.angle) + 6);
 
       const nodeA = NODES.phase - (2 * Math.PI * t) / NODES.period; // retrograde
       for (const [key, a] of [['rahu', nodeA], ['ketu', nodeA + Math.PI]] as const) {
-        set(
-          key,
-          earth.x + LUNAR.rx * Math.cos(a),
-          earth.y + LUNAR.rx * TILT * Math.sin(a),
-          depthZ(earth.angle) + 5,
-        );
+        let nx = earth.x + LUNAR.rx * Math.cos(a);
+        let ny = earth.y + LUNAR.rx * TILT * Math.sin(a);
+
+        // A node is a point ON the Moon's orbit, so the Moon passes exactly through
+        // one every half lunar cycle — correct, and the reason eclipses happen there,
+        // but it leaves the marker completely covered and unclickable. Slide it out
+        // along its own radius just far enough to stay separate.
+        const d = Math.hypot(nx - moonX, ny - moonY);
+        if (d < NODE_CLEARANCE) {
+          const ux = nx - earth.x;
+          const uy = ny - earth.y;
+          const ul = Math.hypot(ux, uy) || 1;
+          const push = NODE_CLEARANCE - d;
+          nx += (ux / ul) * push;
+          ny += (uy / ul) * push;
+        }
+
+        set(key, nx, ny, depthZ(earth.angle) + 5);
       }
       // The lunar orbit ring itself is centred on Earth.
       set('lunar-ring', earth.x, earth.y, depthZ(earth.angle) + 4);
@@ -114,7 +134,7 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
         aria-label={grahaName(g)}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPick(id); } }}
       >
-        <span className="orb-hit" style={{ width: Math.max(radius * 2 + 22, 44), height: Math.max(radius * 2 + 22, 44) }} />
+        <span className="orb-hit" style={{ width: Math.max(radius * 2 + 26, 52), height: Math.max(radius * 2 + 26, 52) }} />
         <span
           className="orb-glow"
           style={{
@@ -128,14 +148,23 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
             style={{ width: SATURN_RING.rx * 2, height: SATURN_RING.ry * 2, borderColor: g.color.core }}
           />
         )}
-        <span
-          className="orb-body"
-          style={{
-            width: radius * 2, height: radius * 2,
-            background: `radial-gradient(circle at 34% 30%, ${g.color.core}, ${g.color.glow} 72%, ${g.color.ink})`,
-            boxShadow: `0 0 ${radius * 0.9}px ${g.color.glow}`,
-          }}
-        />
+        {TEXTURES[id] ? (
+          <PlanetSphere
+            id={id}
+            uid="orb"
+            className="orb-body orb-sphere"
+            style={{ width: radius * 2, height: radius * 2, boxShadow: `0 0 ${radius * 0.8}px ${g.color.glow}` }}
+          />
+        ) : (
+          <span
+            className="orb-body"
+            style={{
+              width: radius * 2, height: radius * 2,
+              background: `radial-gradient(circle at 34% 30%, ${g.color.core}, ${g.color.glow} 72%, ${g.color.ink})`,
+              boxShadow: `0 0 ${radius * 0.9}px ${g.color.glow}`,
+            }}
+          />
+        )}
         <span className="orb-label">{grahaName(g)}</span>
       </div>
     );
@@ -174,13 +203,11 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
 
         {/* Earth — present, labelled, and deliberately not clickable */}
         <div className="orb orb-earth" ref={reg('earth')}>
-          <span
-            className="orb-body"
-            style={{
-              width: 32, height: 32,
-              background: 'radial-gradient(circle at 34% 30%, #7fb4e8, #2f6ea8 70%, #0d2135)',
-              boxShadow: '0 0 14px rgba(90, 150, 220, 0.55)',
-            }}
+          <PlanetSphere
+            id="earth"
+            uid="orb"
+            className="orb-body orb-sphere"
+            style={{ width: 38, height: 38, boxShadow: '0 0 15px rgba(90, 150, 220, 0.5)' }}
           />
           {/* Above the body on purpose: Chandra's label sits below, so the two
               can never collide however the Moon happens to be placed. */}
@@ -213,7 +240,7 @@ export function SolarSystem({ reduced, onPick, dissolving }: Props) {
               aria-label={grahaName(g)}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPick(id); } }}
             >
-              <span className="orb-hit" style={{ width: 44, height: 44 }} />
+              <span className="orb-hit" style={{ width: 56, height: 56 }} />
               <span
                 className="orb-glow"
                 style={{

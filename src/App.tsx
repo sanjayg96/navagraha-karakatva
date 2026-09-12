@@ -7,7 +7,6 @@ import { Bands } from './components/Bands';
 import { LensRail } from './components/LensRail';
 import { GrahaPanel } from './components/GrahaPanel';
 import { GrahaGateway } from './components/GrahaGateway';
-import { SpineView } from './components/SpineView';
 import { TodayPanel } from './components/TodayPanel';
 import { About } from './components/About';
 import { ShareButton } from './components/ShareButton';
@@ -24,7 +23,7 @@ export function App() {
   const [resortKey, setResortKey] = useState(0);
 
   // Document views should start at the top when you arrive at them.
-  useEffect(() => { window.scrollTo(0, 0); }, [route.view, route.view === 'spine' ? route.graha : '']);
+  useEffect(() => { window.scrollTo(0, 0); }, [route.view, route.view === 'graha' ? route.graha : '']);
 
   const domain = route.view === 'lens' ? DOMAIN_MAP[route.domain] : undefined;
   const panelGraha =
@@ -34,7 +33,6 @@ export function App() {
 
   useEffect(() => {
     if (route.view === 'lens' && !DOMAIN_MAP[route.domain]) navigate({ view: 'home' });
-    if (route.view === 'spine' && !(route.graha in GRAHAS)) navigate({ view: 'spine', graha: 'shani' });
     if (route.view === 'graha' && !(route.graha in GRAHAS)) navigate({ view: 'home' });
   }, [route]);
 
@@ -53,7 +51,6 @@ export function App() {
           <nav className="hdr-nav">
             <button data-on={route.view === 'home' || route.view === 'graha'} onClick={() => navigate({ view: 'home' })}>Grahas</button>
             <button data-on={route.view === 'lens'} onClick={() => navigate({ view: 'lens', domain: 'body' })}>Lenses</button>
-            <button data-on={route.view === 'spine'} onClick={() => navigate({ view: 'spine', graha: 'shani' })}>Spine</button>
             <button data-on={route.view === 'today'} onClick={() => navigate({ view: 'today' })}>Today</button>
             <button data-on={route.view === 'about'} onClick={() => navigate({ view: 'about' })}>About</button>
             <ShareButton />
@@ -70,9 +67,6 @@ export function App() {
         )}
         {route.view === 'about' && <About />}
         {route.view === 'today' && <TodayPanel />}
-        {route.view === 'spine' && route.graha in GRAHAS && (
-          <SpineView grahaId={route.graha as GrahaId} reduced={reduced} />
-        )}
 
         {route.view === 'lens' && domain && (
           <div className="lens-view">

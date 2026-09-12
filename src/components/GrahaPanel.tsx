@@ -90,7 +90,7 @@ export function GrahaPanel({ domain, grahaId, reduced, onClose }: Props) {
           </div>
 
           <div className="pn-cta">
-            <button className="ghost-btn" onClick={() => navigate({ view: 'spine', graha: g.id })}>
+            <button className="ghost-btn" onClick={() => navigate({ view: 'graha', graha: g.id })}>
               see {grahaShort(g)} across all ten lenses →
             </button>
           </div>

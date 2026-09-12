@@ -6,6 +6,8 @@ import { grahaName, grahaShort } from '../lib/names';
 import { hexA } from '../lib/color';
 import { navigate } from '../router';
 import { ChipPill } from './Chip';
+import { PlanetSphere } from './PlanetSphere';
+import { TEXTURES, CLASSICAL_COLOUR } from '../lib/textures';
 
 interface Props {
   grahaId: GrahaId;
@@ -27,22 +29,35 @@ export function GrahaGateway({ grahaId, domainId, reduced }: Props) {
   return (
     <div className="gate">
       <div className="gate-orb" aria-hidden="true">
+        <div className="gate-layer">
         <motion.div
           className="gate-disc"
-          style={{
-            background: `radial-gradient(circle at 62% 44%, ${g.color.core} 0%, ${g.color.glow} 42%, ${g.color.ink} 78%, transparent 82%)`,
-          }}
           initial={reduced ? false : { x: '-14%', scale: 0.72, opacity: 0 }}
           animate={{ x: '0%', scale: 1, opacity: 1 }}
           transition={reduced ? { duration: 0.2 } : { type: 'spring', stiffness: 62, damping: 18 }}
-        />
-        <motion.div
-          className="gate-bloom"
-          style={{ background: `radial-gradient(circle, ${g.color.glow} 0%, transparent 64%)` }}
-          initial={reduced ? false : { opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 0.85, scale: 1 }}
-          transition={{ duration: reduced ? 0.2 : 1.1, ease: 'easeOut' }}
-        />
+        >
+          {/* Same procedural surface as the orrery, so the body you clicked is
+              recognisably the body that arrived. */}
+          {TEXTURES[grahaId]
+            ? <PlanetSphere id={grahaId} uid="gate" className="gate-sphere" />
+            : <span
+                className="gate-sphere"
+                style={{
+                  display: 'block', borderRadius: '50%',
+                  background: `radial-gradient(circle at 62% 44%, ${g.color.core} 0%, ${g.color.glow} 42%, ${g.color.ink} 78%, transparent 82%)`,
+                }}
+              />}
+        </motion.div>
+        </div>
+        <div className="gate-layer">
+          <motion.div
+            className="gate-bloom"
+            style={{ background: `radial-gradient(circle, ${g.color.glow} 0%, transparent 64%)` }}
+            initial={reduced ? false : { opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 0.85, scale: 1 }}
+            transition={{ duration: reduced ? 0.2 : 1.1, ease: 'easeOut' }}
+          />
+        </div>
       </div>
 
       <motion.div
@@ -86,11 +101,35 @@ export function GrahaGateway({ grahaId, domainId, reduced }: Props) {
           })}
         </div>
 
-        <div className="gate-foot">
-          <button className="ghost-btn" onClick={() => navigate({ view: 'spine', graha: grahaId })}>
-            all ten at once →
-          </button>
+        <div className="gate-levers">
+          <div>
+            <h4 className="h-good">strengthened by</h4>
+            <ul className="pn-list good">{g.strengthenedBy.map((x) => <li key={x}>{x}</li>)}</ul>
+          </div>
+          <div>
+            <h4 className="h-bad">depleted by</h4>
+            <ul className="pn-list bad">{g.depletedBy.map((x) => <li key={x}>{x}</li>)}</ul>
+          </div>
         </div>
+
+        <div className="gate-two" style={{ marginTop: 30 }}>
+          <div>
+            <h4 className="h-plain">when it is flowing</h4>
+            <ul className="pn-list">{g.flowing.map((x) => <li key={x}>{x}</li>)}</ul>
+          </div>
+          <div>
+            <h4 className="h-plain">when it is strained</h4>
+            <ul className="pn-list">{g.strained.map((x) => <li key={x}>{x}</li>)}</ul>
+          </div>
+        </div>
+
+        <p className="gate-colour">
+          <span className="eyebrow">on the two colours</span>
+          The sphere is {g.english.replace('north lunar node', 'Rāhu').replace('south lunar node', 'Ketu')} as it
+          actually looks. The accent colour used for {grahaShort(g)} throughout this app is the
+          one the texts assign it — <strong style={{ color: g.color.core }}>{CLASSICAL_COLOUR[grahaId]}</strong>.
+          The two are unrelated, and the classical colour is the one that carries meaning.
+        </p>
       </motion.div>
 
       <AnimatePresence>

@@ -45,6 +45,27 @@ export function About() {
         basis for taking the rest seriously.
       </p>
 
+      <h2>Two colour systems, and why they disagree</h2>
+      <p>
+        The spheres on the home page are rendered as the bodies actually look —
+        Mercury is grey rock, Mars is rust, Jupiter has belts. The accent colour used
+        for each graha everywhere else in this app is a different thing entirely: it
+        is the colour the <em>texts</em> assign, and it is part of the kāraka data.
+      </p>
+      <ul>
+        <li><strong>Sūrya</strong> — copper-red · <strong>Chandra</strong> — white · <strong>Maṅgala</strong> — blood red</li>
+        <li><strong>Budha</strong> — green, the colour of dūrvā grass · <strong>Guru</strong> — yellow, tawny gold</li>
+        <li><strong>Śukra</strong> — bright white, variegated · <strong>Śani</strong> — black, dark blue</li>
+        <li><strong>Rāhu</strong> — smoke · <strong>Ketu</strong> — grey, many-coloured</li>
+      </ul>
+      <p>
+        So Budha is green here while Mercury is grey there, and that is not an error.
+        The classical colour belongs to the principle — it turns up again in the cloth,
+        the stone, the grain and the offering associated with that graha — and it was
+        never a claim about the planet's appearance. Showing both, side by side, is the
+        clearest way to make the difference between the two obvious.
+      </p>
+
       <h2>The behavioural sections</h2>
       <p>
         Every graha has a <em>strengthened by</em> and a <em>depleted by</em> list. These are
@@ -70,7 +91,9 @@ export function About() {
 
       <h2>Notes on the build</h2>
       <p>
-        449 mapped items across 10 lenses and 9 grahas. The horā calculation uses the NOAA
+        449 mapped items across 10 lenses and 9 grahas. The planets are drawn with
+        procedural SVG rather than images, so they stay sharp at any size and need no
+        network request. The horā calculation uses the NOAA
         solar equations against your device’s location, which never leaves your browser;
         without location it falls back to a 6am/6pm day and says so. Every view has its own
         URL, so any lens or any graha can be linked directly.

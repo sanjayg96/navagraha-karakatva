@@ -381,48 +381,6 @@ a { color: inherit; }
 }
 
 /* =========================================================
-   SPINE
-   ========================================================= */
-
-.spine { max-width: 1000px; margin: 0 auto; padding: 40px 28px 100px; width: 100%; }
-.spine-hd {
-  position: sticky; top: 0; z-index: 5; padding: 18px 0 14px;
-  /* Near-opaque: a gradient that reaches transparent too early lets the rows
-     underneath show through the pinned name and switcher. */
-  background: rgba(5, 6, 13, 0.95);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 14px 22px -14px rgba(5, 6, 13, 0.95);
-}
-.spine-row {
-  display: grid; grid-template-columns: 138px 1fr; gap: 24px;
-  padding: 22px 0; border-top: 1px solid var(--hair-soft);
-}
-.spine-dom { padding-top: 2px; }
-.spine-dom-t { font-family: var(--display); font-size: 18px; line-height: 1.2; }
-.spine-dom-n { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; color: var(--ink-ghost); margin-top: 4px; }
-.spine-body .spine-note {
-  font-family: var(--ui); font-size: 15px; line-height: 1.62;
-  color: var(--ink); margin-bottom: 12px; max-width: 68ch;
-}
-.spine-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.spine-chips .chip { max-width: none; cursor: default; }
-
-.spine-switch { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 14px; }
-.gsw {
-  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 6px 10px; border: 1px solid var(--hair-soft); border-radius: 3px; color: var(--ink-faint);
-  transition: all 0.22s; display: flex; align-items: center; gap: 6px;
-}
-.gsw:hover { color: var(--ink); border-color: var(--hair); }
-.gsw[data-on='true'] { border-color: currentColor; }
-.gsw .band-dot { width: 7px; height: 7px; }
-
-@media (max-width: 620px) {
-  .spine { padding: 24px 18px 80px; }
-  .spine-row { grid-template-columns: 1fr; gap: 10px; padding: 18px 0; }
-}
-
-/* =========================================================
    TODAY + ABOUT
    ========================================================= */
 
@@ -526,10 +484,10 @@ a { color: inherit; }
    ORRERY — the home page front door
    ========================================================= */
 
-.orrery-wrap { position: relative; width: 100%; height: clamp(360px, 52vh, 580px); }
+.orrery-wrap { position: relative; width: 100%; height: clamp(420px, 68vh, 860px); }
 .orrery {
   position: absolute; top: 50%; left: 50%;
-  width: 1180px; height: 600px;
+  width: 1520px; height: 690px;
   transform-origin: center center;
   transition: opacity 0.7s ease, filter 0.7s ease;
 }
@@ -559,6 +517,7 @@ a { color: inherit; }
   position: relative; border-radius: 50%; pointer-events: none;
   transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.2, 1);
 }
+.orb-sphere { display: block; overflow: visible; }
 .orb-ring {
   position: absolute; border-radius: 50%; pointer-events: none;
   border: 1.5px solid; opacity: 0.55;
@@ -570,9 +529,10 @@ a { color: inherit; }
    enough that an occasional overlap reads as depth rather than as breakage. */
 .orb-label {
   position: absolute; top: 100%; left: 50%; transform: translate(-50%, 9px);
-  font-family: var(--ui); font-size: 12px; font-weight: 500; white-space: nowrap;
-  color: var(--ink-faint); pointer-events: none;
-  text-shadow: 0 1px 4px rgba(3, 4, 10, 0.98), 0 0 9px rgba(3, 4, 10, 0.9);
+  font-family: var(--ui); font-size: 13px; font-weight: 500; white-space: nowrap;
+  color: #d7d4e6; pointer-events: none;
+  text-shadow:
+    0 1px 3px rgba(3, 4, 10, 1), 0 0 8px rgba(3, 4, 10, 0.98), 0 0 16px rgba(3, 4, 10, 0.85);
   transition: color 0.3s, opacity 0.3s;
 }
 /* The node markers are glyphs; their names appear only on hover, because four
@@ -580,12 +540,12 @@ a { color: inherit; }
 .orb-node .orb-label { opacity: 0; }
 .orb-node[data-on='true'] .orb-label { opacity: 1; }
 .orb-label-muted {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-  color: var(--ink-ghost); font-weight: 400;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.09em;
+  color: #9b98ae; font-weight: 400;
 }
 .orb-label-above { top: auto; bottom: 100%; transform: translate(-50%, -9px); }
 .orb[data-on='true'] { z-index: 200 !important; }
-.orb[data-on='true'] .orb-label { color: var(--ink); }
+.orb[data-on='true'] .orb-label { color: #fff; }
 .orb[data-on='true'] .orb-glow { opacity: 1; transform: scale(1.25); }
 .orb[data-on='true'] .orb-body { transform: scale(1.16); }
 .orb:focus-visible { outline: none; }
@@ -662,25 +622,34 @@ a { color: inherit; }
 
 .gate { flex: 1; display: flex; min-height: 0; position: relative; }
 
+/* Sticky, not relative: the panel beside it is now long enough that the column
+   would otherwise be as tall as the whole document and centre the body off-screen.
+   Sticking it also means the graha stays with you as you read. */
 .gate-orb {
-  flex: none; width: 30%; min-width: 200px; position: relative; overflow: hidden;
+  flex: none; width: 30%; min-width: 200px;
+  position: sticky; top: 0; align-self: flex-start;
+  height: 100vh; overflow: hidden;
 }
-/* Centred exactly on the left edge, so the column shows precisely half the disc
-   and the body reads as continuing off-screen. */
+/* Centred by flex + a negative margin rather than by translate(-50%, -50%):
+   framer animates `transform` on these, which would wipe out a centring transform.
+   The disc's centre lands exactly on the column's left edge, so the column shows
+   precisely half of it and the body reads as continuing off-screen. */
+.gate-layer {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  pointer-events: none;
+}
 .gate-disc {
-  position: absolute; top: 50%; left: 0;
-  width: 200%; aspect-ratio: 1; border-radius: 50%;
-  transform: translate(-50%, -50%);
+  flex: none; width: 200%; aspect-ratio: 1; margin-left: -100%;
+  border-radius: 50%;
 }
 .gate-bloom {
-  position: absolute; top: 50%; left: 0; width: 260%; aspect-ratio: 1;
-  transform: translate(-50%, -50%); border-radius: 50%;
-  filter: blur(54px); pointer-events: none;
+  flex: none; width: 260%; aspect-ratio: 1; margin-left: -130%;
+  border-radius: 50%; filter: blur(54px);
 }
 
 .gate-panel {
-  flex: 1; min-width: 0; overflow-y: auto;
-  padding: 30px 40px 70px 46px;
+  flex: 1; min-width: 0;
+  padding: 30px 40px 90px 46px;
 }
 .gate-back { margin-bottom: 24px; }
 .gate-name {
@@ -706,6 +675,24 @@ a { color: inherit; }
 .gate-lens-n { font-family: var(--mono); font-size: 11px; flex: none; }
 .gate-foot { margin-top: 30px; }
 
+.gate-sphere { width: 100%; height: 100%; border-radius: 50%; }
+
+.gate-levers, .gate-two {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 38px;
+}
+.gate-levers h4, .gate-two h4 {
+  margin: 0 0 9px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; font-weight: 500;
+}
+.h-plain { color: var(--ink-faint); }
+
+.gate-colour {
+  margin-top: 34px; padding: 16px 18px; border-left: 1px solid var(--hair);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), transparent 80%);
+  font-size: 13.5px; line-height: 1.64; color: var(--ink-dim); max-width: 62ch;
+}
+.gate-colour .eyebrow { display: block; margin-bottom: 7px; }
+
 /* ---------- the exploded cell ---------- */
 
 .cell-scrim { position: fixed; inset: 0; z-index: 44; background: rgba(3, 4, 10, 0.74); backdrop-filter: blur(3px); }
@@ -727,11 +714,12 @@ a { color: inherit; }
 
 @media (max-width: 860px) {
   .gate { flex-direction: column; }
-  .gate-orb { width: 100%; height: 150px; min-width: 0; }
+  .gate-orb { width: 100%; height: 150px; min-width: 0; position: relative; align-self: auto; }
   .gate-disc { top: 50%; left: 50%; width: 340px; margin-left: 0; transform: translate(-50%, -30%); }
   .gate-bloom { left: 50%; width: 460px; transform: translate(-50%, -30%); }
   .gate-panel { padding: 22px 18px 60px; }
   .gate-lenses { grid-template-columns: 1fr 1fr; }
+  .gate-levers, .gate-two { grid-template-columns: 1fr; gap: 20px; }
   .cell-in { padding: 20px 18px 34px; }
   .cell-title { font-size: 25px; }
 }

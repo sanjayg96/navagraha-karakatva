@@ -12,9 +12,11 @@ import type { GrahaId } from '../data/types';
  * Moon must be comfortably visible and clickable, so sizes are compressed into a
  * range where the *ordering* is honest but the ratios are not.
  */
-export const ORBIT_STAGE = { w: 1180, h: 600, cx: 590, cy: 300 };
+export const ORBIT_STAGE = { w: 1520, h: 690, cx: 760, cy: 345 };
 
-export const TILT = 0.45;
+/** Flatter than it looks natural to make it, so the stage stays wide and short
+ * and the scale-to-fit is not throttled by viewport height. */
+export const TILT = 0.40;
 
 export interface OrbitBody {
   id: GrahaId | 'earth';
@@ -37,20 +39,20 @@ export interface OrbitBody {
  * through the Sun at the top and bottom of its orbit. Mercury needs rx >= ~150.
  */
 export const BODIES: OrbitBody[] = [
-  { id: 'surya',   rx: 0,   period: 1,  phase: 0,   radius: 46 },
-  { id: 'budha',   rx: 160, period: 16, phase: 0.6, radius: 11 },
-  { id: 'shukra',  rx: 215, period: 24, phase: 2.4, radius: 15 },
-  { id: 'earth',   rx: 278, period: 32, phase: 4.1, radius: 16 },
-  { id: 'mangala', rx: 340, period: 44, phase: 5.6, radius: 13 },
-  { id: 'guru',    rx: 415, period: 70, phase: 1.3, radius: 28 },
-  { id: 'shani',   rx: 490, period: 96, phase: 3.3, radius: 24, ring: true },
+  { id: 'surya',   rx: 0,   period: 1,  phase: 0,   radius: 52 },
+  { id: 'budha',   rx: 190, period: 16, phase: 0.6, radius: 13 },
+  { id: 'shukra',  rx: 262, period: 24, phase: 2.4, radius: 18 },
+  { id: 'earth',   rx: 345, period: 32, phase: 4.1, radius: 19 },
+  { id: 'mangala', rx: 430, period: 44, phase: 5.6, radius: 15 },
+  { id: 'guru',    rx: 530, period: 70, phase: 1.3, radius: 32 },
+  { id: 'shani',   rx: 625, period: 96, phase: 3.3, radius: 28, ring: true },
 ];
 
 /**
  * The Moon's orbit around Earth, drawn far larger than it should be so that
  * Chandra is clickable and the two nodes are placeable at all.
  */
-export const LUNAR = { rx: 84, period: 18, phase: 1.1, radius: 10 };
+export const LUNAR = { rx: 118, period: 18, phase: 1.1, radius: 12 };
 
 /**
  * Rāhu and Ketu are the two points where the Moon's orbit crosses the ecliptic —
@@ -59,7 +61,7 @@ export const LUNAR = { rx: 84, period: 18, phase: 1.1, radius: 10 };
  */
 export const NODES = { period: 150, phase: 0.4 };
 
-export const SATURN_RING = { rx: 42, ry: 15 };
+export const SATURN_RING = { rx: 49, ry: 17 };
 
 /** Elliptical position at time t (seconds). */
 export function orbitPos(b: { rx: number; period: number; phase: number }, t: number) {
